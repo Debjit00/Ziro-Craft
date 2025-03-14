@@ -1,5 +1,4 @@
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -24,7 +23,26 @@
         }
         h1 {
             margin: 0;
+            flex-grow: 1;
+            text-align: center;
         }
+            .home-button {
+        background-color: white;
+        color: #333;
+        padding: 10px 20px;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: 5px;
+        border: 2px solid #333;
+        transition: all 0.3s ease;
+    }
+
+    .home-button:hover {
+        background-color: #ff6f61;
+        color: white;
+        border-color: #ff6f61;
+    }
+
         .sell-icon {
             background-color: #ff6f61;
             color: white;
@@ -97,27 +115,19 @@
     </style>
 </head>
 
-<!-- <body>
-    <header>
-        <h1>Our Exclusive Products</h1>
-    </header>
-    <div class="search-bar">
-        <input type="text" id="search-input" placeholder="Search for the other item you need to buy">
-        <button onclick="searchProducts()">Search</button>
-    </div>
-    <div id="products-container" class="product-grid"></div>
-</body> -->
-
 <body>
     <header>
+        <a href="../index.html" class="home-button">Home</a>
         <h1>Our Exclusive Products</h1>
         <a href="sell.html" class="sell-icon">+ Sell</a>
     </header>
+
     <div class="search-bar">
         <input type="text" id="search-input" placeholder="Search for the other item you need to buy">
         <button onclick="searchProducts()">Search</button>
     </div>
     <div id="products-container" class="product-grid"></div>
+
     <script type="module">
         const products_data = {
             "products": [
@@ -189,7 +199,7 @@
                 }
             ]
         };
-        
+
         const container = document.getElementById('products-container');
         function displayProducts(products) {
             container.innerHTML = "";
@@ -208,7 +218,7 @@
                 container.appendChild(productDiv);
             });
         }
-        
+
         function searchProducts() {
             const query = document.getElementById('search-input').value.toLowerCase();
             const filteredProducts = products_data.products.filter(product =>
@@ -218,7 +228,7 @@
             );
             displayProducts(filteredProducts);
         }
-        
+
         displayProducts(products_data.products);
     </script>
 </body>
