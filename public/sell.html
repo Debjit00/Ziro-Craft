@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -16,11 +17,14 @@
             color: white;
             padding: 20px;
             display: flex;
-            justify-content: space-between;
             align-items: center;
+            position: relative;
         }
-        h1 {
+        header h1 {
             margin: 0;
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
         }
         .sell-icon {
             background-color: #ff6f61;
@@ -31,6 +35,7 @@
             font-weight: bold;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
             transition: background-color 0.3s ease;
+            margin-left: auto;
         }
         .sell-icon:hover {
             background-color: #e85b50;
