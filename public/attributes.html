@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -71,14 +72,24 @@
         .submit-btn:hover {
             background-color: #e85b50;
         }
+        .selected-category {
+            font-size: 18px;
+            font-weight: bold;
+            color: #333;
+            margin-bottom: 20px;
+        }
     </style>
-</head>
+</head>-
 <body>
     <header>
-        <h1>Post Your Ad - Add Details</h1>
+        <h1>Sell Your Products</h1>
     </header>
     <div class="container">
         <h2>Include Some Details</h2>
+
+        <!-- Display Selected Category -->
+        <p class="selected-category" id="selected-category">Selected Category: </p>
+
         <form action="#" method="POST">
             <label for="ad-title">Ad title *</label>
             <input type="text" id="ad-title" name="ad-title" required minlength="10" maxlength="70">
@@ -100,5 +111,17 @@
             <button type="submit" class="submit-btn">Post Your Ad</button>
         </form>
     </div>
+
+    <script>
+        // Extract the category from the URL and display it
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            const category = params.get('category');
+            if (category) {
+                document.getElementById('selected-category').innerText = `Selected Category: ${category}`;
+            }
+        };
+    </script>
 </body>
 </html>
+
