@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Northeast India Arts & Crafts</title>
+    <link rel="stylesheet" href="public/index.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Explore Northeast India's Traditional Arts & Crafts</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="public/products.html">Products</a></li>
+                    <li><a href="public/artisans.html">Artisans</a></li>
+                    <li><a href="public/cart.html">Cart</a></li>
+                    <li id="user-profile-container" class="user-profile" style="display: none;">
+                        <span class="user-name" id="user-name"></span>
+                        <div class="profile-icon" id="profile-icon"></div>
+                        <div class="profile-dropdown" id="profile-dropdown">
+                            <a href="public/profile.html" class="profile-dropdown-item">My Profile</a>
+                            <a href="public/orders.html" class="profile-dropdown-item">My Orders</a>
+                            <a href="#" class="profile-dropdown-item logout-btn" id="logout-btn">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Bringing the Art of Northeast India to the World</h2>
+            <p>Discover handcrafted treasures by skilled artisans, preserving cultural heritage and supporting local communities.</p>
+            <a href="public/products.html" class="btn">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- Login Form - Will be hidden when user is logged in -->
+    <div class="login-container" id="login-container">
+        <h2>Login</h2>
+        <input type="email" id="email" placeholder="Enter your email">
+        <input type="password" id="password" placeholder="Enter your password">
+        <button onclick="login()">Login</button>
+        <a href="public/signup.html" class="signup-link">Don't have an account? Sign Up</a>
+    </div>
+
+    <script>
+        // Check login status when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            checkLoginStatus();
+            
+            // Setup profile dropdown toggle
+            const profileIcon = document.getElementById('profile-icon');
+            const profileDropdown = document.getElementById('profile-dropdown');
+            
+            if (profileIcon) {
+                profileIcon.addEventListener('click', function() {
+                    profileDropdown.classList.toggle('active');
+                });
+            }
+            
+            // Setup logout button
+            const logoutBtn = document.getElementById('logout-btn');
+            if (logoutBtn) {
+                logoutBtn.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    logout();
+                });
+            }
+            
+            // Close dropdown when clicking outside
+            window.addEventListener('click', function(e) {
+                if (!e.target.matches('.profile-icon') && profileDropdown.classList.contains('active')) {
+                    profileDropdown.classList.remove('active');
+                }
+            });
+        });
+        
+        // Check if user is logged in
+        function checkLoginStatus() {
+            const isLoggedIn = localStorage.getItem('loggedIn') === 'true';
+            const userEmail = localStorage.getItem('userEmail');
+            const userName = localStorage.getItem('userName');
+            
+            const loginContainer = document.getElementById('login-container');
+            const userProfileContainer = document.getElementById('user-profile-container');
+            const userNameElement = document.getElementById('user-name');
+            const profileIcon = document.getElementById('profile-icon');
+            
+            if (isLoggedIn && userEmail) {
+                // Hide login form
+                if (loginContainer) loginContainer.style.display = 'none';
+                
+                // Show user profile
+                if (userProfileContainer) userProfileContainer.style.display = 'flex';
+                
+                // Set user name
+                if (userNameElement && userName) {
+                    userNameElement.textContent = userName;
+                } else if (userNameElement && userEmail) {
+                    // If we have email but not name, fetch user info
+                    fetchUserProfile(userEmail);
+                }
+                
+                // Set profile icon initial
+                if (profileIcon && userName) {
+                    profileIcon.textContent = userName.charAt(0).toUpperCase();
+                } else if (profileIcon && userEmail) {
+                    profileIcon.textContent = userEmail.charAt(0).toUpperCase();
+                }
+            } else {
+                // Show login form
+                if (loginContainer) loginContainer.style.display = 'block';
+                
+                // Hide user profile
+                if (userProfileContainer) userProfileContainer.style.display = 'none';
+            }
+        }
+        
+        // Fetch user profile info
+        function fetchUserProfile(email) {
+            fetch(`/api/user?email=${encodeURIComponent(email)}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Failed to fetch user profile');
+                    }
+                    return response.json();
+                })
+                .then(user => {
+                    const userNameElement = document.getElementById('user-name');
+                    const profileIcon = document.getElementById('profile-icon');
+                    
+                    if (userNameElement) {
+                        userNameElement.textContent = user.name;
+                    }
+                    
+                    if (profileIcon) {
+                        profileIcon.textContent = user.name.charAt(0).toUpperCase();
+                    }
+                    
+                    // Store user name in local storage
+                    localStorage.setItem('userName', user.name);
+                })
+                .catch(error => {
+                    console.error('Error fetching user profile:', error);
+                });
+        }
+        
+        // Login function
+        function login() {
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+
+            if (!email || !password) {
+                alert('Please enter valid credentials.');
+                return;
+            }
+
+            // Use URLSearchParams instead of JSON for testing
+            const formData = new URLSearchParams();
+            formData.append('email', email);
+            formData.append('password', password);
+
+            fetch('/api/login', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded'
+                },
+                body: formData
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'Login successful') {
+                    alert('Login successful!');
+                    // Store login state if needed
+                    localStorage.setItem('loggedIn', 'true');
+                    localStorage.setItem('userEmail', email);
+                    // Redirect to products page or dashboard
+                    window.location.href = 'public/products.html';
+                } else {
+                    alert(data.message);
+                }
+            })
+            .catch(error => {
+                alert('Error connecting to server. Please try again.');
+                console.error('Error:', error);
+            });
+        }
+
+        function logout() {
+            // Clear local storage items related to authentication
+            localStorage.removeItem('loggedIn');
+            localStorage.removeItem('userEmail');
+            localStorage.removeItem('userName');
+            
+            // Redirect to home page
+            window.location.href = '/';
+            
+            // Optional: Call server-side logout endpoint
+            fetch('/api/logout', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .catch(error => {
+                console.error('Error during logout:', error);
+            });
+        }
+    </script>
+</body>
+</html>

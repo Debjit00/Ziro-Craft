@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Your Ad - Attributes</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+        }
+        header {
+            background: #333;
+            color: white;
+            padding: 20px;
+            text-align: center;
+        }
+        .container {
+            padding: 20px;
+            background: white;
+            margin: 20px auto;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+        }
+        h2 {
+            margin-bottom: 20px;
+        }
+        label {
+            font-weight: bold;
+            display: block;
+            margin-bottom: 5px;
+        }
+        input[type="text"], textarea, input[type="number"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .photo-upload {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+            gap: 10px;
+        }
+        .photo-upload label {
+            width: 100px;
+            height: 100px;
+            background: #eee;
+            border: 2px dashed #ccc;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .photo-upload input[type="file"] {
+            display: none;
+        }
+        .submit-btn {
+            background-color: #ff6f61;
+            color: white;
+            padding: 10px 20px;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+        .submit-btn:hover {
+            background-color: #e85b50;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Post Your Ad - Add Details</h1>
+    </header>
+    <div class="container">
+        <h2>Include Some Details</h2>
+        <form action="#" method="POST">
+            <label for="ad-title">Ad title *</label>
+            <input type="text" id="ad-title" name="ad-title" required minlength="10" maxlength="70">
+
+            <label for="description">Description *</label>
+            <textarea id="description" name="description" required minlength="10" rows="5"></textarea>
+
+            <h2>Set a Price</h2>
+            <label for="price">Price *</label>
+            <input type="number" id="price" name="price" required>
+
+            <h2>Upload up to 12 Photos</h2>
+            <div class="photo-upload">
+                <label for="photo1">+ Add Photo</label>
+                <input type="file" id="photo1" name="photos" accept="image/*" multiple>
+            </div>
+
+            <br>
+            <button type="submit" class="submit-btn">Post Your Ad</button>
+        </form>
+    </div>
+</body>
+</html>

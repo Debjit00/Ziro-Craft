@@ -1,0 +1,225 @@
+
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Products</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f5f5f5;
+            text-align: center;
+        }
+        header {
+            background: #333;
+            color: white;
+            padding: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        h1 {
+            margin: 0;
+        }
+        .sell-icon {
+            background-color: #ff6f61;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            font-weight: bold;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+            transition: background-color 0.3s ease;
+        }
+        .sell-icon:hover {
+            background-color: #e85b50;
+        }
+        .search-bar {
+            margin: 20px auto;
+            width: 50%;
+            display: flex;
+            justify-content: center;
+        }
+        .search-bar input {
+            width: 80%;
+            padding: 18px;
+            border: 1px solid #ccc;
+            border-radius: 5px 0 0 5px;
+        }
+        .search-bar button {
+            padding: 10px;
+            background: #28a745;
+            color: white;
+            border: none;
+            cursor: pointer;
+            border-radius: 0 5px 5px 0;
+        }
+        .product-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            padding: 20px;
+            max-width: 1200px;
+            margin: auto;
+        }
+        .product-card {
+            background: white;
+            padding: 15px;
+            border-radius: 8px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            transition: transform 0.2s;
+        }
+        .product-card:hover {
+            transform: scale(1.05);
+        }
+        .product-card img {
+            width: 100%;
+            height: 200px;
+            object-fit: cover;
+            border-radius: 5px;
+        }
+        .cart-btn {
+            background-color: #28a745;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .cart-btn:hover {
+            background-color: #218838;
+        }
+    </style>
+</head>
+
+<!-- <body>
+    <header>
+        <h1>Our Exclusive Products</h1>
+    </header>
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search for the other item you need to buy">
+        <button onclick="searchProducts()">Search</button>
+    </div>
+    <div id="products-container" class="product-grid"></div>
+</body> -->
+
+<body>
+    <header>
+        <h1>Our Exclusive Products</h1>
+        <a href="sell.html" class="sell-icon">+ Sell</a>
+    </header>
+    <div class="search-bar">
+        <input type="text" id="search-input" placeholder="Search for the other item you need to buy">
+        <button onclick="searchProducts()">Search</button>
+    </div>
+    <div id="products-container" class="product-grid"></div>
+    <script type="module">
+        const products_data = {
+            "products": [
+                {
+                    "id": 1,
+                    "name": "Muga Silk Saree",
+                    "category": "Weaving",
+                    "origin": "Assam",
+                    "material": "Muga Silk",
+                    "price": 15000,
+                    "description": "A luxurious golden-hued Muga silk saree, handwoven by Assamese artisans.",
+                    "image_url": "https://example.com/images/muga_silk_saree.jpg",
+                    "availability": "In Stock"
+                },
+                {
+                    "id": 2,
+                    "name": "Eri Silk Stole",
+                    "category": "Weaving",
+                    "origin": "Assam",
+                    "material": "Eri Silk",
+                    "price": 2500,
+                    "description": "Soft and eco-friendly Eri silk stole, perfect for all seasons.",
+                    "image_url": "https://example.com/images/eri_silk_stole.jpg",
+                    "availability": "In Stock"
+                },
+                {
+                    "id": 3,
+                    "name": "Handcrafted Bamboo Lamp",
+                    "category": "Bamboo and Cane Crafts",
+                    "origin": "Nagaland",
+                    "material": "Bamboo, Cane",
+                    "price": 1800,
+                    "description": "Elegant handcrafted bamboo lamp that adds a rustic charm to your home decor.",
+                    "image_url": "https://example.com/images/bamboo_lamp.jpg",
+                    "availability": "Limited Stock"
+                },
+                {
+                    "id": 4,
+                    "name": "Cane Storage Basket",
+                    "category": "Bamboo and Cane Crafts",
+                    "origin": "Manipur",
+                    "material": "Cane",
+                    "price": 1200,
+                    "description": "Durable and stylish cane storage basket, handmade by skilled artisans.",
+                    "image_url": "https://example.com/images/cane_basket.jpg",
+                    "availability": "In Stock"
+                },
+                {
+                    "id": 5,
+                    "name": "Asharikandi Terracotta Pot",
+                    "category": "Pottery and Terracotta",
+                    "origin": "Assam",
+                    "material": "Terracotta Clay",
+                    "price": 900,
+                    "description": "Traditional Asharikandi-style terracotta pot, ideal for home decor.",
+                    "image_url": "https://example.com/images/asharikandi_pot.jpg",
+                    "availability": "In Stock"
+                },
+                {
+                    "id": 6,
+                    "name": "Wooden Carved Wall Panel",
+                    "category": "Wood Carving",
+                    "origin": "Meghalaya",
+                    "material": "Teak Wood",
+                    "price": 5000,
+                    "description": "Intricately carved wooden wall panel depicting traditional Northeast motifs.",
+                    "image_url": "https://example.com/images/wooden_panel.jpg",
+                    "availability": "Limited Stock"
+                }
+            ]
+        };
+        
+        const container = document.getElementById('products-container');
+        function displayProducts(products) {
+            container.innerHTML = "";
+            products.forEach(product => {
+                const productDiv = document.createElement('div');
+                productDiv.classList.add('product-card');
+                productDiv.innerHTML = `
+                    <img src="${product.image_url}" alt="${product.name}">
+                    <h2>${product.name}</h2>
+                    <p>${product.description}</p>
+                    <p><strong>Price:</strong> ₹${product.price}</p>
+                    <p><strong>Material:</strong> ${product.material}</p>
+                    <p><strong>Availability:</strong> ${product.availability}</p>
+                    <button class="cart-btn" onclick="addToCart(${product.id})">Add to Cart</button>
+                `;
+                container.appendChild(productDiv);
+            });
+        }
+        
+        function searchProducts() {
+            const query = document.getElementById('search-input').value.toLowerCase();
+            const filteredProducts = products_data.products.filter(product =>
+                product.name.toLowerCase().includes(query) ||
+                product.category.toLowerCase().includes(query) ||
+                product.material.toLowerCase().includes(query)
+            );
+            displayProducts(filteredProducts);
+        }
+        
+        displayProducts(products_data.products);
+    </script>
+</body>
+</html>
