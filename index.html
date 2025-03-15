@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Northeast India Arts & Crafts</title>
+    <link rel="stylesheet" href="public/css/index.css">
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Explore Northeast India's Traditional Arts & Crafts</h1>
+            <nav>
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="public/products.html">Products</a></li>
+                    <li><a href="public/artisans.html">Artisans</a></li>
+                    <li><a href="public/cart.html">Cart</a></li>
+                    <li id="user-profile-container" class="user-profile" style="display: none;">
+                        <span class="user-name" id="user-name"></span>
+                        <div class="profile-icon" id="profile-icon"></div>
+                        <div class="profile-dropdown" id="profile-dropdown">
+                            <a href="public/profile.html" class="profile-dropdown-item">My Profile</a>
+                            <a href="public/orders.html" class="profile-dropdown-item">My Orders</a>
+                            <a href="#" class="profile-dropdown-item logout-btn" id="logout-btn">Logout</a>
+                        </div>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+    <section class="hero">
+        <div class="hero-content">
+            <h2>Bringing the Art of Northeast India to the World</h2>
+            <p>Discover handcrafted treasures by skilled artisans, preserving cultural heritage and supporting local communities.</p>
+            <a href="public/products.html" class="btn">Shop Now</a>
+        </div>
+    </section>
+
+    <!-- Login Form - Will be hidden when user is logged in -->
+    <div class="login-container" id="login-container">
+        <h2>Login</h2>
+        <input type="email" id="email" placeholder="Enter your email">
+        <input type="password" id="password" placeholder="Enter your password">
+        <button onclick="login()">Login</button>
+        <a href="public/signup.html" class="signup-link">Don't have an account? Sign Up</a>
+    </div>
+    <script src="public/js/index.js"></script>
+</body>
+</html>

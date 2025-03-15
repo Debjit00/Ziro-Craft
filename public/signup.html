@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f4f4f4;
+            text-align: center;
+        }
+        .signup-container {
+            width: 350px;
+            margin: 50px auto;
+            padding: 20px;
+            background: white;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            border-radius: 8px;
+        }
+        .signup-container h2 {
+            margin-bottom: 20px;
+        }
+        .signup-container input {
+            width: 90%;
+            padding: 10px;
+            margin: 10px 0;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+        .signup-container button {
+            background-color: #2c3e50;
+            color: white;
+            padding: 10px;
+            width: 100%;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            margin-top: 10px;
+        }
+        .signup-container button:hover {
+            background-color: #1a252f;
+        }
+        .error-message {
+            color: #e74c3c;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+        <input type="text" id="name" placeholder="Full Name">
+        <input type="email" id="email" placeholder="Email">
+        <input type="password" id="password" placeholder="Password">
+        <input type="password" id="confirm-password" placeholder="Confirm Password">
+        <p id="error-message" class="error-message"></p>
+        <button onclick="signup()">Sign Up</button>
+    </div>
+
+    <script>
+        function signup() {
+            const name = document.getElementById('name').value;
+            const email = document.getElementById('email').value;
+            const password = document.getElementById('password').value;
+            const confirmPassword = document.getElementById('confirm-password').value;
+            const errorMessage = document.getElementById('error-message');
+
+            errorMessage.textContent = '';
+
+            if (!name || !email || !password || !confirmPassword) {
+                errorMessage.textContent = 'Please fill in all fields.';
+                return;
+            }
+
+            if (password !== confirmPassword) {
+                errorMessage.textContent = 'Passwords do not match.';
+                return;
+            }
+
+            const userData = {
+                name: name,
+                email: email,
+                password: password
+            };
+
+            fetch('/api/signup', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(userData)
+            })
+            .then(response => response.json())
+            .then(data => {
+                if (data.message === 'User registered successfully') {
+                    alert('Sign up successful! Redirecting to login page...');
+                    window.location.href = '../index.html';
+                } else {
+                    errorMessage.textContent = data.message;
+                }
+            })
+            .catch(error => {
+                errorMessage.textContent = 'Error connecting to server. Please try again.';
+                console.error('Error:', error);
+            });
+        }
+    </script>
+</body>
+</html>

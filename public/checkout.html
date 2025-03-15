@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Checkout | E-Commerce</title>
+    <script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+    <style>
+        body { font-family: Arial, sans-serif; margin: 20px; }
+        .container { max-width: 500px; margin: auto; padding: 20px; border: 1px solid #ddd; border-radius: 10px; }
+        input, button { width: 100%; padding: 10px; margin: 5px 0; }
+        button { background-color: #008CBA; color: white; border: none; cursor: pointer; }
+        button:hover { background-color: #005f73; }
+        .total { font-size: 18px; font-weight: bold; margin-top: 10px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Checkout</h2>
+    
+    <label>Product Price (₹):</label>
+    <input type="number" id="price" value="500" disabled>
+
+    <label>Weight (kg):</label>
+    <input type="number" id="weight" value="1" disabled>
+
+    <label>Delivery Address:</label>
+    <input type="text" id="address" placeholder="Enter your address">
+
+    <label>Pincode:</label>
+    <input type="number" id="pincode" placeholder="Enter pincode" oninput="calculateTotal()">
+
+    <div class="total">
+        Shipping: ₹<span id="shipping-cost">0</span><br>
+        GST (18%): ₹<span id="gst">0</span><br>
+        <hr>
+        <b>Total: ₹<span id="total">0</span></b>
+    </div>
+
+    <button onclick="payNow()">Pay Now</button>
+</div>
+
+<script>
+    let basePrice = 500;  // Example product price
+    let gstRate = 0.18;   // 18% GST
+    let shippingCost = 0; // Default shipping cost
+
+    function calculateTotal() {
+        let pincode = document.getElementById("pincode").value;
+        let weight = document.getElementById("weight").value;
+        
+        // Simulate a shipping API request (Replace with actual API call)
+        shippingCost = weight * 50; // ₹50 per kg (Example rate)
+        
+        let gst = basePrice * gstRate;
+        let total = basePrice + gst + shippingCost;
+        
+        document.getElementById("shipping-cost").innerText = shippingCost.toFixed(2);
+        document.getElementById("gst").innerText = gst.toFixed(2);
+        document.getElementById("total").innerText = total.toFixed(2);
+    }
+
+    function payNow() {
+        let address = document.getElementById("address").value;
+        if (!address) {
+            alert("Please enter a valid address");
+            return;
+        }
+
+        let totalAmount = document.getElementById("total").innerText * 100; // Convert to paise
+
+        let options = {
+            key: "YOUR_RAZORPAY_KEY",  // Replace with your Razorpay Key
+            amount: totalAmount,
+            currency: "INR",
+            name: "E-Commerce Store",
+            description: "Product Purchase",
+            handler: function (response) {
+                alert("Payment successful! Transaction ID: " + response.razorpay_payment_id);
+                window.location.href = "order-confirmation.html";  // Redirect after payment
+            },
+            prefill: {
+                name: "Customer Name",
+                email: "customer@example.com",
+                contact: "9999999999"
+            }
+        };
+
+        let rzp = new Razorpay(options);
+        rzp.open();
+    }
+
+    window.onload = calculateTotal;
+</script>
+
+</body>
+</html>
