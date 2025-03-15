@@ -1,5 +1,3 @@
-
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -94,19 +92,20 @@
         .cart-btn:hover {
             background-color: #218838;
         }
+        .buy-btn {
+            background-color: #ff6f61;
+            color: white;
+            padding: 10px;
+            border: none;
+            cursor: pointer;
+            margin-top: 10px;
+            border-radius: 5px;
+        }
+        .buy-btn:hover {
+            background-color: #e85b50;
+        }
     </style>
 </head>
-
-<!-- <body>
-    <header>
-        <h1>Our Exclusive Products</h1>
-    </header>
-    <div class="search-bar">
-        <input type="text" id="search-input" placeholder="Search for the other item you need to buy">
-        <button onclick="searchProducts()">Search</button>
-    </div>
-    <div id="products-container" class="product-grid"></div>
-</body> -->
 
 <body>
     <header>
@@ -119,6 +118,18 @@
     </div>
     <div id="products-container" class="product-grid"></div>
     <script type="module">
+        async function fetchOffers() {
+            try {
+                const response = await fetch('/api/products');
+                const data = await response.json();
+                return data.offers || [];
+            } catch (error) {
+                console.error('Error fetching offers:', error);
+                return [];
+            }
+        }
+        
+        // const products_data = {}
         const products_data = {
             "products": [
                 {
@@ -191,9 +202,34 @@
         };
         
         const container = document.getElementById('products-container');
-        function displayProducts(products) {
+        async function displayProducts() {
             container.innerHTML = "";
-            products.forEach(product => {
+            
+            // First, display real offers from database
+            const offers = await fetchOffers();
+            
+            // Display database offers
+            offers.forEach(offer => {
+                const productDiv = document.createElement('div');
+                productDiv.classList.add('product-card');
+                productDiv.innerHTML = `
+    <a href="/item/${offer.id}" style="text-decoration: none; color: inherit;">
+        <img src="${offer.image_url}" alt="${offer.title}">
+        <h2>${offer.title}</h2>
+        <p>${offer.description}</p>
+        <p><strong>Price:</strong> ₹${offer.price}</p>
+        <p><strong>Category:</strong> ${offer.category}</p>
+        <p><strong>Seller:</strong> ${offer.seller_name}</p>
+        <p><strong>Availability:</strong> In Stock</p>
+    </a>
+    <button class="cart-btn" onclick="addToCart(${offer.id})">Add to Cart</button>
+    <button class="buy-btn" onclick="buyNow(${offer.id})">Buy Now</button>
+`;
+                container.appendChild(productDiv);
+            });
+            
+            // Then display dummy products
+            products_data.products.forEach(product => {
                 const productDiv = document.createElement('div');
                 productDiv.classList.add('product-card');
                 productDiv.innerHTML = `
@@ -209,17 +245,69 @@
             });
         }
         
-        function searchProducts() {
+        async function searchProducts() {
             const query = document.getElementById('search-input').value.toLowerCase();
+            const offers = await fetchOffers();
+            
+            // Filter database offers
+            const filteredOffers = offers.filter(offer =>
+                offer.title.toLowerCase().includes(query) ||
+                offer.category.toLowerCase().includes(query) ||
+                offer.description.toLowerCase().includes(query)
+            );
+            
+            // Filter dummy products
             const filteredProducts = products_data.products.filter(product =>
                 product.name.toLowerCase().includes(query) ||
                 product.category.toLowerCase().includes(query) ||
                 product.material.toLowerCase().includes(query)
             );
-            displayProducts(filteredProducts);
+            
+            // Display filtered results
+            container.innerHTML = "";
+            
+            // Display filtered offers
+            filteredOffers.forEach(offer => {
+                const productDiv = document.createElement('div');
+                productDiv.classList.add('product-card');
+                productDiv.innerHTML = `
+                    <img src="${offer.image_url}" alt="${offer.title}">
+                    <h2>${offer.title}</h2>
+                    <p>${offer.description}</p>
+                    <p><strong>Price:</strong> ₹${offer.price}</p>
+                    <p><strong>Category:</strong> ${offer.category}</p>
+                    <p><strong>Seller:</strong> ${offer.seller_name}</p>
+                    <p><strong>Availability:</strong> In Stock</p>
+                    <button class="cart-btn" onclick="addToCart(${offer.id})">Add to Cart</button>
+                `;
+                container.appendChild(productDiv);
+            });
+            
+            // Display filtered dummy products
+            filteredProducts.forEach(product => {
+                const productDiv = document.createElement('div');
+                productDiv.classList.add('product-card');
+                productDiv.innerHTML = `
+                    <img src="${product.image_url}" alt="${product.name}">
+                    <h2>${product.name}</h2>
+                    <p>${product.description}</p>
+                    <p><strong>Price:</strong> ₹${product.price}</p>
+                    <p><strong>Material:</strong> ${product.material}</p>
+                    <p><strong>Availability:</strong> ${product.availability}</p>
+                    <button class="cart-btn" onclick="addToCart(${product.id})">Add to Cart</button>
+                `;
+                container.appendChild(productDiv);
+            });
         }
         
-        displayProducts(products_data.products);
+        displayProducts();
+
+        window.addToCart = function(id) {
+            alert(`Product with ID ${id} added to cart!`);
+        };
+        function buyNow(productId) {
+            window.location.href = `/item/${productId}`;
+        }
     </script>
 </body>
 </html>

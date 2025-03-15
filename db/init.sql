@@ -9,28 +9,23 @@ CREATE TABLE IF NOT EXISTS users (
     password VARCHAR(255) NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS products (
+CREATE TABLE offers (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100),
-    category VARCHAR(50),
-    price DECIMAL(10, 2),
-    description TEXT,
-    image_url VARCHAR(255),
-    artisan_id INT
+    user_id INT NOT NULL,
+    title VARCHAR(70) NOT NULL UNIQUE,
+    description TEXT NOT NULL,
+    price DECIMAL(10, 2) NOT NULL,
+    category VARCHAR(100) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (user_id) REFERENCES users(id)
 );
 
-CREATE TABLE IF NOT EXISTS artisans (
+CREATE TABLE offer_images (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    name VARCHAR(100),
-    bio TEXT,
-    craft_type VARCHAR(50),
-    profile_image VARCHAR(255)
-);
-
-CREATE TABLE IF NOT EXISTS cart (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    user_id INT,
-    product_id INT,
-    quantity INT,
-    FOREIGN KEY (product_id) REFERENCES products(id)
+    offer_id INT NOT NULL,
+    image_data MEDIUMBLOB NOT NULL,
+    image_type VARCHAR(50) NOT NULL,
+    image_name VARCHAR(255) NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    FOREIGN KEY (offer_id) REFERENCES offers(id) ON DELETE CASCADE
 );
