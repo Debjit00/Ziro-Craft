@@ -6,7 +6,6 @@ import { dirname } from 'path';
 import { join } from 'path';
 import cors from 'cors';
 import multer from 'multer';
-import fs from 'fs/promises';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = dirname(__filename);
@@ -14,23 +13,12 @@ const __dirname = dirname(__filename);
 const app = express();
 const port = 3000;
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, uploadsDir);
-    },
-    filename: function (req, file, cb) {
-        const uniqueSuffix = Date.now() + '-' + Math.round(Math.random() * 1E9);
-        const extension = file.originalname.split('.').pop();
-        cb(null, `${uniqueSuffix}.${extension}`);
-    }
-});
-
 const upload = multer({
-    storage: storage,
+    storage: multer.memoryStorage(),
     limits: { fileSize: 5 * 1024 * 1024 }, // 5MB limit
     fileFilter: function (req, file, cb) {
         if (!file.mimetype.startsWith('image/')) {
-            return cb(new Error('Only image files are allowed!'), false);
+        return cb(new Error('Only image files are allowed!'), false);
         }
         cb(null, true);
     }
@@ -190,17 +178,11 @@ app.post('/api/offers', upload.array('photos', 12), async (req, res) => {
         // Process uploaded images
         if (req.files && req.files.length > 0) {
             const imageInsertPromises = req.files.map(async file => {
-                // Read file content
-                const imageBuffer = await fs.readFile(file.path);
-                
                 // Insert image data into database
                 await db.query(
                     'INSERT INTO offer_images (offer_id, image_data, image_type, image_name) VALUES (?, ?, ?, ?)',
-                    [offerId, imageBuffer, file.mimetype, file.originalname]
+                    [offerId, file.buffer, file.mimetype, file.originalname]
                 );
-                
-                // Delete the temp file since we now have it in the database
-                await fs.unlink(file.path);
             });
             
             await Promise.all(imageInsertPromises);
