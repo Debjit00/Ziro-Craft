@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Payment Gateway</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;
+        }
+        
+        body {
+            background-color: #f0f0f0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+        
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 20px;
+        }
+        
+        .header {
+            background-color: #4761e6;
+            color: white;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            border-radius: 8px 8px 0 0;
+        }
+        
+        .header .logo {
+            width: 48px;
+            height: 48px;
+            background-color: white;
+            border-radius: 8px;
+            margin-right: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .header .company-name {
+            font-size: 24px;
+            font-weight: 600;
+        }
+        
+        .back-button {
+            margin-right: 20px;
+            cursor: pointer;
+            font-size: 24px;
+        }
+        
+        .payment-container {
+            display: flex;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            border-radius: 0 0 8px 8px;
+            overflow: hidden;
+        }
+        
+        .payment-methods {
+            width: 40%;
+            padding: 20px;
+            border-right: 1px solid #eee;
+        }
+        
+        .payment-details {
+            width: 60%;
+            padding: 20px;
+            overflow-y: auto;
+            max-height: 600px;
+        }
+        
+        .account-info, .amount-info {
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .label {
+            color: #888;
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .value {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .small-text {
+            font-size: 14px;
+            margin-bottom: 5px;
+        }
+        
+        .payment-method {
+            display: flex;
+            align-items: center;
+            padding: 15px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            border-radius: 4px;
+        }
+        
+        .payment-method.active {
+            background-color: #f5f5f5;
+        }
+        
+        .method-icon {
+            width: 32px;
+            height: 32px;
+            background-color: #e0e0ff;
+            color: #4761e6;
+            border-radius: 4px;
+            margin-right: 15px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .method-title {
+            font-weight: 500;
+            margin-bottom: 2px;
+        }
+        
+        .method-subtitle {
+            font-size: 12px;
+            color: #888;
+        }
+        
+        .card-form, .netbanking-form, .wallet-form, .upi-form, .qr-form {
+            margin-top: 20px;
+            display: none;
+        }
+        
+        .card-form.active, .netbanking-form.active, .wallet-form.active, .upi-form.active, .qr-form.active {
+            display: block;
+        }
+        
+        .form-section {
+            margin-bottom: 20px;
+        }
+        
+        .form-section-title {
+            font-size: 16px;
+            margin-bottom: 10px;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 16px;
+            margin-bottom: 15px;
+        }
+        
+        .cvv-expiry {
+            display: flex;
+            gap: 15px;
+        }
+        
+        .cvv-expiry input {
+            width: 50%;
+        }
+        
+        .pay-button {
+            background-color: #4761e6;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            padding: 15px;
+            width: 100%;
+            font-size: 16px;
+            font-weight: 500;
+            cursor: pointer;
+            margin-top: 10px;
+        }
+        
+        .powered-by {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            margin-top: 20px;
+            padding: 15px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .powered-by-text {
+            color: #888;
+            font-size: 14px;
+            margin-right: 10px;
+        }
+        
+        .payment-logos img {
+            height: 24px;
+            margin-right: 10px;
+        }
+        
+        .bank-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .bank-option {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .bank-option.selected {
+            border-color: #4761e6;
+            background-color: #f0f4ff;
+        }
+        
+        .bank-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            margin: 0 auto 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .wallet-list {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .wallet-option {
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            padding: 10px;
+            text-align: center;
+            cursor: pointer;
+        }
+        
+        .wallet-option.selected {
+            border-color: #4761e6;
+            background-color: #f0f4ff;
+        }
+        
+        .wallet-icon {
+            width: 40px;
+            height: 40px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+            margin: 0 auto 5px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .upi-options {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .upi-option {
+            flex: 1;
+            text-align: center;
+            padding: 10px;
+            border-bottom: 2px solid transparent;
+            cursor: pointer;
+        }
+        
+        .upi-option.active {
+            border-bottom-color: #4761e6;
+            font-weight: 500;
+        }
+        
+        .upi-content {
+            display: none;
+        }
+        
+        .upi-content.active {
+            display: block;
+        }
+        
+        .qr-code {
+            width: 200px;
+            height: 200px;
+            margin: 20px auto;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            border: 1px solid #ddd;
+        }
+        
+        .upi-instructions {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #666;
+        }
+        
+        .upi-id-note {
+            font-size: 12px;
+            color: #888;
+            margin-top: 5px;
+        }
+        
+        #qrcode {
+            padding: 10px;
+            background-color: white;
+            margin: 0 auto;
+        }
+        
+        .qr-loading {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 200px;
+        }
+        
+        .spinner {
+            border: 4px solid rgba(0, 0, 0, 0.1);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            border-left-color: #4761e6;
+            animation: spin 1s linear infinite;
+            margin-bottom: 10px;
+        }
+        
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        
+        .database-info {
+            font-size: 12px;
+            color: #888;
+            margin-top: 10px;
+            padding: 8px;
+            background-color: #f5f5f5;
+            border-radius: 4px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="back-button">&#8249;</div>
+            <div class="logo">
+                <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <path d="M12 2L4 6V18L12 22L20 18V6L12 2Z" fill="#4761e6" stroke="#4761e6" stroke-width="2"/>
+                </svg>
+            </div>
+            <div class="company-name">SecurePay</div>
+        </div>
+        
+        <div class="payment-container">
+            <div class="payment-methods">
+                <div class="account-info">
+                    <div class="label">Account number</div>
+                    <div class="value">1287654321</div>
+                </div>
+                
+                <div class="small-text">Select a payment method</div>
+                
+                <div class="payment-method active" data-method="debit-card">
+                    <div class="method-icon">💳</div>
+                    <div>
+                        <div class="method-title">Debit Card</div>
+                        <div class="method-subtitle">Visa, Mastercard, RuPay</div>
+                    </div>
+                </div>
+                
+                <div class="payment-method" data-method="credit-card">
+                    <div class="method-icon">💳</div>
+                    <div>
+                        <div class="method-title">Credit Card</div>
+                        <div class="method-subtitle">Visa, Mastercard</div>
+                    </div>
+                </div>
+                
+                <div class="payment-method" data-method="netbanking">
+                    <div class="method-icon">🏦</div>
+                    <div>
+                        <div class="method-title">Netbanking</div>
+                        <div class="method-subtitle">Pay with Internet Banking Account</div>
+                    </div>
+                </div>
+                
+                <div class="payment-method" data-method="wallet">
+                    <div class="method-icon">👛</div>
+                    <div>
+                        <div class="method-title">Wallet</div>
+                        <div class="method-subtitle">Pay using a Wallet</div>
+                    </div>
+                </div>
+                
+                <div class="payment-method" data-method="upi">
+                    <div class="method-icon">📱</div>
+                    <div>
+                        <div class="method-title">UPI</div>
+                        <div class="method-subtitle">Pay using BHIM, Tez and other UPI apps</div>
+                    </div>
+                </div>
+                
+                <div class="payment-method" data-method="qr">
+                    <div class="method-icon">📷</div>
+                    <div>
+                        <div class="method-title">QR Code</div>
+                        <div class="method-subtitle">Scan QR code to pay</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="payment-details">
+                <div class="amount-info">
+                    <div class="label">Amount payable is</div>
+                    <div class="value" id="payment-amount">Loading...</div>
+                    <div class="database-info">Amount fetched from database</div>
+                </div>
+                
+                <!-- Debit Card Form -->
+                <div class="card-form active" id="debit-card-form">
+                    <div class="form-section-title">Pay with Debit Card</div>
+                    <div class="form-section">
+                        <div class="label">Card Number</div>
+                        <input type="text" placeholder="Card Number">
+                    </div>
+                    
+                    <div class="cvv-expiry">
+                        <div class="form-section">
+                            <div class="label">Expiry Date</div>
+                            <input type="text" placeholder="MM / YY">
+                        </div>
+                        
+                        <div class="form-section">
+                            <div class="label">CVV</div>
+                            <input type="password" placeholder="•••">
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <div class="label">Cardholder's Name</div>
+                        <input type="text" placeholder="Cardholder's Name">
+                    </div>
+                    
+                    <button class="pay-button">Pay Now</button>
+                </div>
+                
+                <!-- Credit Card Form -->
+                <div class="card-form" id="credit-card-form">
+                    <div class="form-section-title">Pay with Credit Card</div>
+                    <div class="form-section">
+                        <div class="label">Card Number</div>
+                        <input type="text" placeholder="Card Number">
+                    </div>
+                    
+                    <div class="cvv-expiry">
+                        <div class="form-section">
+                            <div class="label">Expiry Date</div>
+                            <input type="text" placeholder="MM / YY">
+                        </div>
+                        
+                        <div class="form-section">
+                            <div class="label">CVV</div>
+                            <input type="password" placeholder="•••">
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <div class="label">Cardholder's Name</div>
+                        <input type="text" placeholder="Cardholder's Name">
+                    </div>
+                    
+                    <button class="pay-button">Pay Now</button>
+                </div>
+                
+                <!-- Netbanking Form -->
+                <div class="netbanking-form" id="netbanking-form">
+                    <div class="form-section-title">Pay with Netbanking</div>
+                    <div class="form-section">
+                        <div class="label">Select your Bank</div>
+                        <div class="bank-list">
+                            <div class="bank-option">
+                                <div class="bank-icon">SBI</div>
+                                <div>State Bank</div>
+                            </div>
+                            <div class="bank-option">
+                                <div class="bank-icon">HDFC</div>
+                                <div>HDFC Bank</div>
+                            </div>
+                            <div class="bank-option">
+                                <div class="bank-icon">ICICI</div>
+                                <div>ICICI Bank</div>
+                            </div>
+                            <div class="bank-option">
+                                <div class="bank-icon">AXIS</div>
+                                <div>Axis Bank</div>
+                            </div>
+                            <div class="bank-option">
+                                <div class="bank-icon">KTK</div>
+                                <div>Kotak Bank</div>
+                            </div>
+                            <div class="bank-option">
+                                <div class="bank-icon">IDFC</div>
+                                <div>IDFC Bank</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <div class="label">Or select from the list</div>
+                        <select>
+                            <option>Select Bank</option>
+                            <option>State Bank of India</option>
+                            <option>HDFC Bank</option>
+                            <option>ICICI Bank</option>
+                            <option>Axis Bank</option>
+                            <option>Kotak Mahindra Bank</option>
+                            <option>IDFC First Bank</option>
+                            <option>Yes Bank</option>
+                            <option>IndusInd Bank</option>
+                            <option>Bank of Baroda</option>
+                            <option>Punjab National Bank</option>
+                        </select>
+                    </div>
+                    
+                    <button class="pay-button">Pay Now</button>
+                </div>
+                
+                <!-- Wallet Form -->
+                <div class="wallet-form" id="wallet-form">
+                    <div class="form-section-title">Pay with Wallet</div>
+                    <div class="form-section">
+                        <div class="label">Select your Wallet</div>
+                        <div class="wallet-list">
+                            <div class="wallet-option">
+                                <div class="wallet-icon">PP</div>
+                                <div>Paytm</div>
+                            </div>
+                            <div class="wallet-option">
+                                <div class="wallet-icon">PW</div>
+                                <div>PhonePe</div>
+                            </div>
+                            <div class="wallet-option">
+                                <div class="wallet-icon">AM</div>
+                                <div>Amazon Pay</div>
+                            </div>
+                            <div class="wallet-option">
+                                <div class="wallet-icon">FP</div>
+                                <div>Freecharge</div>
+                            </div>
+                            <div class="wallet-option">
+                                <div class="wallet-icon">MO</div>
+                                <div>MobiKwik</div>
+                            </div>
+                            <div class="wallet-option">
+                                <div class="wallet-icon">OL</div>
+                                <div>OlaMoney</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="form-section">
+                        <div class="label">Mobile Number</div>
+                        <input type="text" placeholder="Enter Mobile Number">
+                    </div>
+                    
+                    <button class="pay-button">Pay Now</button>
+                </div>
+                
+                <!-- UPI Form -->
+                <div class="upi-form" id="upi-form">
+                    <div class="form-section-title">Pay with UPI</div>
+                    
+                    <div class="upi-options">
+                        <div class="upi-option active" data-upi="id">UPI ID</div>
+                        <div class="upi-option" data-upi="apps">UPI Apps</div>
+                    </div>
+                    
+                    <div class="upi-content active" id="upi-id-content">
+                        <div class="form-section">
+                            <div class="label">Enter UPI ID</div>
+                            <input type="text" placeholder="name@upi">
+                            <div class="upi-id-note">Example: mobilenumber@upi, username@bank</div>
+                        </div>
+                        
+                        <button class="pay-button">Pay Now</button>
+                    </div>
+                    
+                    <div class="upi-content" id="upi-apps-content">
+                        <div class="wallet-list">
+                            <div class="wallet-option">
+                                <div class="wallet-icon">G</div>
+                                <div>Google Pay</div>
+                            </div>
+                            <div class="wallet-option">
+                                <div class="wallet-icon">PP</div>
+                                <div>PhonePe</div>
+                            </div>
+                            <div class="wallet-option">
+                                <div class="wallet-icon">P</div>
+                                <div>Paytm</div>
+                            </div>
+                            <div class="wallet-option">
+                                <div class="wallet-icon">B</div>
+                                <div>BHIM</div>
+                            </div>
+                            <div class="wallet-option">
+                                <div class="wallet-icon">A</div>
+                                <div>Amazon Pay</div>
+                            </div>
+                            <div class="wallet-option">
+                                <div class="wallet-icon">W</div>
+                                <div>WhatsApp Pay</div>
+                            </div>
+                        </div>
+                        <div class="upi-instructions">
+                            Choose your UPI app. You will be redirected to complete the payment.
+                        </div>
+                        <button class="pay-button">Continue</button>
+                    </div>
+                </div>
+                
+                <!-- QR Code Form -->
+                <div class="qr-form" id="qr-form">
+                    <div class="form-section-title">Pay via QR Code</div>
+                    
+                    <div class="qr-code">
+                        <div id="qr-container">
+                            <div class="qr-loading">
+                                <div class="spinner"></div>
+                                <div>Generating QR Code...</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="upi-instructions">
+                        <p>Scan this QR code using any UPI app</p>
+                        <p>Amount: <span id="qr-amount">Loading...</span></p>
+                        <p>Merchant: SecurePay</p>
+                    </div>
+                    
+                    <button class="pay-button">I've completed the payment</button>
+                </div>
+            </div>
+        </div>
+        
+        <div class="powered-by">
+            <div class="powered-by-text">
+                Securely process and disburse digital payments for your business.
+            </div>
+            <div class="payment-logos">
+                <img src="/api/placeholder/40/24" alt="Visa">
+                <img src="/api/placeholder/40/24" alt="Mastercard">
+                <img src="/api/placeholder/40/24" alt="Other cards">
+            </div>
+            <div class="powered-by-text">SecurePay</div>
+        </div>
+    </div>
+
+    <!-- QR Code Generator Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+
+    <script>
+        window.onload = function() {
+            const params = new URLSearchParams(window.location.search);
+            console.log(params, 23);
+            alert(`${params}`);
+            const category = params.get('');
+        }
+
+        // Payment Data Simulation
+        document.addEventListener('DOMContentLoaded', function() {
+            // Simulate database fetch for payment amount
+            simulateDatabaseFetch();
+            
+            // Payment method tabs
+            const paymentMethods = document.querySelectorAll('.payment-method');
+            const paymentForms = document.querySelectorAll('.card-form, .netbanking-form, .wallet-form, .upi-form, .qr-form');
+            
+            paymentMethods.forEach(method => {
+                method.addEventListener('click', function() {
+                    // Update active tab
+                    paymentMethods.forEach(m => m.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show respective form
+                    const methodType = this.getAttribute('data-method');
+                    paymentForms.forEach(form => form.classList.remove('active'));
+                    document.getElementById(`${methodType}-form`).classList.add('active');
+                    
+                    // Generate QR code if QR method is selected
+                    if (methodType === 'qr') {
+                        generateQRCode();
+                    }
+                });
+            });
+            
+            // UPI tabs
+            const upiOptions = document.querySelectorAll('.upi-option');
+            const upiContents = document.querySelectorAll('.upi-content');
+            
+            upiOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    // Update active tab
+                    upiOptions.forEach(o => o.classList.remove('active'));
+                    this.classList.add('active');
+                    
+                    // Show respective content
+                    const upiType = this.getAttribute('data-upi');
+                    upiContents.forEach(content => content.classList.remove('active'));
+                    document.getElementById(`upi-${upiType}-content`).classList.add('active');
+                });
+            });
+            
+            // Bank selection
+            const bankOptions = document.querySelectorAll('.bank-option');
+            bankOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    bankOptions.forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+            
+            // Wallet selection
+            const walletOptions = document.querySelectorAll('.wallet-option');
+            walletOptions.forEach(option => {
+                option.addEventListener('click', function() {
+                    walletOptions.forEach(o => o.classList.remove('selected'));
+                    this.classList.add('selected');
+                });
+            });
+        });
+        
+        // Simulate fetching payment amount from database
+        function simulateDatabaseFetch() {
+            // Show loading state
+            document.getElementById('payment-amount').textContent = 'Loading...';
+            
+            // Simulate API call delay
+            setTimeout(function() {
+                // Generate random amount between 100 and 2000
+                const randomAmount = (Math.random() * 1900 + 100).toFixed(2);
+                const formattedAmount = '₹' + randomAmount;
+                
+                // Update all amount displays
+                // document.getElementById('payment-amount').textContent = formattedAmount;
+                document.getElementById('qr-amount').textContent = formattedAmount;
+                
+                // Store amount in a data attribute for QR code generation
+                // document.getElementById('payment-amount').setAttribute('data-amount', randomAmount);
+            }, 700);
+        }
+        
+        // Generate QR code
+        function generateQRCode() {
+            const qrContainer = document.getElementById('qr-container');
+            
+            // Show loading spinner first
+            qrContainer.innerHTML = `
+                <div class="qr-loading">
+                    <div class="spinner"></div>
+                    <div>Generating QR Code...</div>
+                </div>
+            `;
+            
+            setTimeout(function() {
+                // Get the amount from the payment amount element
+                // const amount = document.getElementById('payment-amount').getAttribute('data-amount') || '249.00';
+                
+                // Create QR code content with transaction details
+                const merchantName = "SecurePay";
+                const accountId = "1287654321";
+                const transactionId = generateRandomId(12);
+                const timestamp = new Date().toISOString();
+                
+                const qrContent = `upi://pay?pa=merchant@securepay&pn=${merchantName}&am=${amount}&tr=${transactionId}&tn=Payment&cu=INR&tid=${timestamp}`;
+                
+                // Clear the container
+                qrContainer.innerHTML = '';
+                
+                // Create a new div for the QR code
+                const qrElement = document.createElement('div');
+                qrElement.id = 'qrcode';
+                qrContainer.appendChild(qrElement);
+                
+                // Generate the QR code
+                new QRCode(qrElement, {
+                    text: qrContent,
+                    width: 180,
+                    height: 180,
+                    colorDark: "#000000",
+                    colorLight: "#ffffff",
+                    correctLevel: QRCode.CorrectLevel.H
+                });
+            }, 1000);
+        }
+        
+        // Generate random ID (for transaction IDs, etc.)
+        function generateRandomId(length) {
+            const chars = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789';
+            let result = '';
+            for (let i = 0; i < length; i++) {
+                result += chars.charAt(Math.floor(Math.random() * chars.length));
+            }
+            return result;
+        }
+    </script>
+</body>
+</html>

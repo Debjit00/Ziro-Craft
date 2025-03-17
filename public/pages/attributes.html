@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Post Your Ad - Attributes</title>
+    <link rel="stylesheet" href="../css/attributes.css">
+</head>
+<body>
+    <header>
+        <div class="nav-buttons" style="display: block;">
+            <a href="../../index.html">Home</a>
+            <a href="../pages/artisans.html">Artisans</a>
+            <a href="../pages/profile.html">Profile</a>
+            <a href="../pages/cart.html">Cart</a>
+        </div>
+        <h1 style="padding-right: 25%;">Sell Your Products</h1>
+    </header>
+    <div class="container">
+        <h2>Include Some Details</h2>
+
+        <p class="selected-category" id="selected-category">Selected Category: </p>
+
+        <form id="ad-form" enctype="multipart/form-data">
+            <input type="hidden" id="category-input" name="category">
+            <input type="hidden" id="email-input" name="email">
+            
+            <label for="ad-title">Ad title</label>
+            <input type="text" id="ad-title" name="title" minlength="10" maxlength="70">
+
+            <label for="description">Description</label>
+            <textarea id="description" name="description" minlength="10" rows="5"></textarea>
+
+            <h2>Set a Price</h2>
+            <label for="price">Price</label>
+            <input type="number" id="price" name="price">
+
+            <h2>Upload up to 12 Photos</h2>
+            <div class="photo-upload">
+                <label for="photo-input" class="photo-upload-label">+ Add Photo</label>
+                <input type="file" id="photo-input" name="photos" accept="image/*" multiple>
+            </div>
+            
+            <div id="upload-feedback" class="feedback"></div>
+            <div id="image-preview-container" class="image-preview-container"></div>
+
+            <h2>Additional Details</h2>
+            <label for="weight">Weight (kg)</label>
+            <input type="number" id="weight" name="weight" step="0.01">
+
+            <label for="length">Length (cm)</label>
+            <input type="number" id="length" name="length" step="0.1">
+
+            <label for="width">Width (cm)</label>
+            <input type="number" id="width" name="width" step="0.1">
+
+            <label for="height">Height (cm)</label>
+            <input type="number" id="height" name="height" step="0.1">
+
+            <button type="submit" id="submit-btn" class="submit-btn">Post Your Ad</button>
+        </form>
+    </div>
+    <script src="../js/attributes.js"></script>
+</body>
+</html>

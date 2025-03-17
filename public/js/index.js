@@ -121,3 +121,56 @@ async function logout(e) {
 
 // Make login function available globally for the onclick in HTML
 window.login = login;
+
+// Quiz Data
+const quizData = [
+    { question: "Which state is famous for its Muga silk?", options: ["Assam", "Manipur", "Meghalaya", "Nagaland"], answer: "Assam" },
+    { question: "What is the traditional bamboo dance of Mizoram called?", options: ["Bihu", "Cheraw", "Thang-Ta", "Dhol Cholom"], answer: "Cheraw" },
+    { question: "Which tribe is known for their intricate wood carvings?", options: ["Nagas", "Mishmis", "Garos", "Khasis"], answer: "Nagas" },
+    { question: "What is the handwoven fabric from Manipur called?", options: ["Puan", "Risa", "Phanek", "Gamocha"], answer: "Phanek" }
+];
+
+let currentQuestion = 0;
+let score = 0;
+
+function loadQuiz() {
+    const questionEl = document.getElementById('question');
+    const optionsEl = document.getElementById('options');
+    const resultEl = document.getElementById('result');
+    
+    questionEl.innerText = quizData[currentQuestion].question;
+    optionsEl.innerHTML = "";
+
+    quizData[currentQuestion].options.forEach(option => {
+        const button = document.createElement("button");
+        button.innerText = option;
+        button.classList.add("quiz-option");
+        button.onclick = () => checkAnswer(option);
+        optionsEl.appendChild(button);
+    });
+
+    resultEl.innerText = "";
+}
+
+function checkAnswer(selected) {
+    const correct = quizData[currentQuestion].answer;
+    const resultEl = document.getElementById('result');
+
+    if (selected === correct) {
+        score++;
+        resultEl.innerText = "Correct!";
+    } else {
+        resultEl.innerText = "Wrong! The correct answer is " + correct + ".";
+    }
+
+    currentQuestion++;
+    if (currentQuestion < quizData.length) {
+        setTimeout(loadQuiz, 1000);
+    } else {
+        setTimeout(() => {
+            resultEl.innerText = `Quiz over! You scored ${score}/${quizData.length}`;
+        }, 1000);
+    }
+}
+
+document.addEventListener('DOMContentLoaded', loadQuiz);
