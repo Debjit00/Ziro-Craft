@@ -6,7 +6,7 @@
   "type": "module",
   "scripts": {
     "start": "node server/server.js",
-    "postinstall": "npm rebuild bcrypt --build-from-source"
+    "preinstall": "npm rebuild bcrypt --build-from-source"
   },
   "engines": {
     "node": ">=16.0.0"
