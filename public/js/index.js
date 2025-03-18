@@ -84,6 +84,7 @@ async function login() {
             const data = await response.json();
             // Store user name in localStorage
             localStorage.setItem('userName', data.userName);
+            localStorage.setItem('userEmail', data.userEmail);
             showLoggedInUI({ name: data.userName });
         } else {
             const errorData = await response.json();
