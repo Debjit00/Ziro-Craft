@@ -360,4 +360,22 @@ app.post('/api/cart/remove/:offerId', async (req, res) => {
 // Connection to localhost
 app.listen(port, () => {
     console.log(`Server running at http://localhost:${port}`);
-});''
+});
+
+async function keepDatabaseRunning() {
+    setTimeout(async function() {
+        try {
+            const query = await db.query('SHOW TABLES');
+        } catch (error) {
+            console.log("Restarted connection to database");
+            const db = await mysql.createConnection({
+                host: 'sql12.freesqldatabase.com',
+                user: 'sql12768257',
+                password: 'eYutR4Kd36',
+                database: 'sql12768257'
+            });
+        }
+        keepDatabaseRunning();
+    }, 1/6 * 60 * 1000);
+}
+keepDatabaseRunning();
