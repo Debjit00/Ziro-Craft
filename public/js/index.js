@@ -84,7 +84,7 @@ async function login() {
             const data = await response.json();
             // Store user name in localStorage
             localStorage.setItem('userName', data.userName);
-            localStorage.setItem('userEmail', data.userEmail);
+            localStorage.setItem('userEmail', data.email);
             showLoggedInUI({ name: data.userName });
         } else {
             const errorData = await response.json();
@@ -111,6 +111,7 @@ async function logout(e) {
         if (response.ok) {
             // Clear user data from localStorage
             localStorage.removeItem('userName');
+            localStorage.removeItem('userEmail');
             showLoginUI();
         } else {
             console.error('Logout failed');
