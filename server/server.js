@@ -26,10 +26,10 @@ const upload = multer({
 
 // Database connection
 const db = await mysql.createConnection({
-    host: 'localhost',
-    user: 'root',
-    password: 'whotfru?',
-    database: 'ecommerce'
+    host: 'sql12.freesqldatabase.com',
+    user: 'sql12768257',
+    password: 'eYutR4Kd36',
+    database: 'sql12768257'
 });
 
 console.log('Connected to database');
