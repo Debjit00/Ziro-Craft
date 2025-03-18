@@ -20,9 +20,20 @@
                     <li><a href="public/pages/products.html"><i class="fas fa-box"></i> Products</a></li>
                     <li><a href="public/pages/artisans.html"><i class="fas fa-users"></i> Artisans</a></li>
                     <li><a href="public/pages/cart.html"><i class="fas fa-shopping-cart"></i> Cart</a></li>
-                    <li id="user-profile-container" class="user-profile" style="display: none;">
+<!--                     <li id="user-profile-container" class="user-profile" style="display: none;">
                         <span class="user-name" id="user-name"></span>
                         <div class="profile-icon" id="profile-icon"></div>
+                        <div class="profile-dropdown" id="profile-dropdown">
+                            <a href="public/pages/profile.html" class="profile-dropdown-item">My Profile</a>
+                            <a href="public/pages/cart.html" class="profile-dropdown-item">My Orders</a>
+                            <a href="#" class="profile-dropdown-item logout-btn" id="logout-btn">Logout</a>
+                        </div>
+                    </li> -->
+                    <li id="user-profile-container" class="user-profile" style="display: none;">
+                        <div class="profile-wrapper">
+                            <div class="profile-icon" id="profile-icon"></div>
+                            <i class="fas fa-caret-down"></i>
+                        </div>
                         <div class="profile-dropdown" id="profile-dropdown">
                             <a href="public/pages/profile.html" class="profile-dropdown-item">My Profile</a>
                             <a href="public/pages/cart.html" class="profile-dropdown-item">My Orders</a>
