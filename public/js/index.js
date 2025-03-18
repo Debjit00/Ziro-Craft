@@ -23,7 +23,7 @@ function showLoggedInUI(user) {
     loginContainer.style.display = 'none';
     
     // Show user profile elements
-    userProfileContainer.style.display = 'block';
+    userProfileContainer.style.display = 'flex';
     userNameElement.textContent = user.name;
     
     // Create initials for profile icon
