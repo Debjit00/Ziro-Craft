@@ -44,7 +44,7 @@ app.use(express.urlencoded({ extended: true }));
 app.get('/', (req, res) => {
     res.sendFile(join(__dirname, '..', 'index.html'));
 });
-app.get('/index', (req, res) => {
+app.get('/index.html', (req, res) => {
     res.redirect('/');
 });
 app.post('/api/login', async (req, res) => {
