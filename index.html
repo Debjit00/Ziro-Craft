@@ -16,10 +16,10 @@
             </div>
             <nav>
                 <ul>
-                    <li><a href="index.html">Home</a></li>
-                    <li><a href="public/pages/products.html">Products</a></li>
-                    <li><a href="public/pages/artisans.html">Artisans</a></li>
-                    <li><a href="public/pages/cart.html">Cart</a></li>
+                    <li><a href="index.html"><i class="fas fa-home"></i> Home</a></li>
+                    <li><a href="public/pages/products.html"><i class="fas fa-box"></i> Products</a></li>
+                    <li><a href="public/pages/artisans.html"><i class="fas fa-users"></i> Artisans</a></li>
+                    <li><a href="public/pages/cart.html"><i class="fas fa-shopping-cart"></i> Cart</a></li>
                     <li id="user-profile-container" class="user-profile" style="display: none;">
                         <span class="user-name" id="user-name"></span>
                         <div class="profile-icon" id="profile-icon"></div>
@@ -33,6 +33,7 @@
             </nav>
         </div>
     </header>
+
     <section class="hero">
         <div class="hero-content">
             <h2>Bringing the Art of Northeast India to the World</h2>
@@ -40,15 +41,15 @@
             <a href="public/pages/products.html" class="btn">Shop Now</a>
         </div>  
     </section>
-<!-- Login Form - Will be hidden when user is logged in --> -->
-   <div class="login-container" id="login-container">
+
+    <div class="login-container" id="login-container">
         <h2>Login</h2>
         <input type="email" id="email" placeholder="Enter your email">
         <input type="password" id="password" placeholder="Enter your password">
         <button onclick="login()">Login</button>
         <a href="public/pages/signup.html" class="signup-link">Don't have an account? Sign Up</a>
     </div>
-    
+
     <section class="quiz-section">
         <h2>Take the Quiz and Learn More!</h2>
         <div id="quiz-container">
@@ -58,13 +59,9 @@
         </div>
     </section>
 
-
-    <!-- Footer added here -->
+    <!-- Footer -->
     <footer>
         <div class="container">
-            <!-- <div class="footer-description">
-                <p>Discover the rich cultural heritage of Northeast India through our handcrafted arts and crafts, made by skilled local artisans.</p>
-            </div> -->
             <ul class="footer-links">
                 <li><a href="public/pages/about.html">About Us</a></li>
                 <li><a href="public/pages/contact.html">Contact Us</a></li>
@@ -81,15 +78,6 @@
         </div>
     </footer>
 
-
     <script src="public/js/index.js"></script>
-    <script>
-        document.addEventListener("DOMContentLoaded", function () {
-            let userLoggedIn = true; // Replace with actual login check
-            if (userLoggedIn) {
-                document.getElementById("quiz-container").style.margin = "auto"; // Remove negative margin
-            }
-        });
-    </script>
 </body>
 </html>
